@@ -4,8 +4,12 @@ on:
   push:
     branches:
       - main
+permissions: {}
 jobs:
   pre-deploy:
+    permissions:
+      id-token: write
+      contents: read
     uses: nationalarchives/tdr-github-actions/.github/workflows/lambda_build.yml@27efbc03aaaa9696eea85ab7a9363d6f92733471 # v0.0.34
     with:
       repo-name: tdr-backend-checks-results
@@ -23,6 +27,9 @@ jobs:
   deploy:
     needs: pre-deploy
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - run: gh workflow run deploy.yml -f environment=intg -f to-deploy=${{ needs.pre-deploy.outputs.next-version }}
