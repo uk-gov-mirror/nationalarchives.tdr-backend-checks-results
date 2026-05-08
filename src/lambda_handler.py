@@ -5,9 +5,14 @@ import uuid
 
 def lambda_handler(event, context):
     details = event["results"]["ResultWriterDetails"]
+
+    print(f"Handling event: {details}")
+
     bucket = details["Bucket"]
     manifest_key = details["Key"]
     consignment_id = manifest_key.split("/")[0]
+
+    print(f"Processing results for consignment: {consignment_id}")
 
     s3 = boto3.client("s3")
     s3_response_object = s3.get_object(Bucket=bucket, Key=manifest_key)
@@ -36,6 +41,9 @@ def lambda_handler(event, context):
         Bucket=bucket,
         Key=results_key,
     )
+
+    print(f"Results processed for consignment: {consignment_id} in bucket {bucket} with key {results_key}")
+
     return {
         "key": results_key,
         "bucket": bucket
