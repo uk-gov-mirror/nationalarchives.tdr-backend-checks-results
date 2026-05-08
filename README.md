@@ -55,5 +55,6 @@ Run the tests with a virtual environment and pytest.
 ```commandline
 python3 -m venv venv
 source venv/bin/activate
+pip install -r requirements.txt
 python3 -m pytest
 ```
